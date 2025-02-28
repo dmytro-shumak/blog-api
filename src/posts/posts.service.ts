@@ -8,8 +8,15 @@ import { CreatePostDto, UpdatePostDto } from './dto/post.dto';
 export class PostsService {
   constructor(@InjectModel(Post.name) private postModel: Model<PostDocument>) {}
 
-  async findAll(): Promise<Post[]> {
-    return this.postModel.find().sort({ createdAt: -1 }).exec();
+  async findAll(
+    page = 1,
+    limit = 10,
+  ): Promise<{ posts: Post[]; total: number }> {
+    const skip = (page - 1) * limit;
+    const posts = await this.postModel.find().skip(skip).limit(limit).exec();
+    const total = await this.postModel.countDocuments().exec();
+
+    return { posts, total };
   }
 
   async findOne(id: string): Promise<Post> {

@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreatePostDto, UpdatePostDto } from './dto/post.dto';
@@ -24,8 +25,11 @@ export class PostsController {
     description: 'List of all posts',
     type: [PostBodySwagger],
   })
-  async getAll() {
-    return this.postsService.findAll();
+  async getAll(@Query('page') page: string, @Query('limit') limit: string) {
+    const pageNumber = parseInt(page, 10) || 1;
+    const limitNumber = parseInt(limit, 10) || 10;
+
+    return this.postsService.findAll(pageNumber, limitNumber);
   }
 
   @ApiOperation({ summary: 'Retrieve a single post by ID' })
