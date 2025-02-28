@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import { Trim } from '../../common/decorators/trim.decorator';
 
 export class CreatePostDto {
   @IsNotEmpty()
@@ -11,10 +12,12 @@ export class CreatePostDto {
 
   @IsString()
   @IsNotEmpty()
+  @Trim()
   content: string;
 
   @IsString()
   @IsNotEmpty()
+  @IsUrl()
   image: string;
 }
 

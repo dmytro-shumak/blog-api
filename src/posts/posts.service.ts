@@ -13,7 +13,12 @@ export class PostsService {
     limit = 10,
   ): Promise<{ posts: Post[]; total: number }> {
     const skip = (page - 1) * limit;
-    const posts = await this.postModel.find().skip(skip).limit(limit).exec();
+    const posts = await this.postModel
+      .find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
     const total = await this.postModel.countDocuments().exec();
 
     return { posts, total };
