@@ -8,7 +8,13 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CreatePostDto, UpdatePostDto } from './dto/post.dto';
 import { PostsService } from './posts.service';
 import { PostBodySwagger } from './swaggers/post-body-swagger';
@@ -24,6 +30,20 @@ export class PostsController {
     status: 200,
     description: 'List of all posts',
     type: [PostBodySwagger],
+  })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+    example: 1,
+    description: 'Page number',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+    example: 10,
+    description: 'Posts per page',
   })
   async getAll(@Query('page') page: string, @Query('limit') limit: string) {
     const pageNumber = parseInt(page, 10) || 1;
